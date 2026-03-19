@@ -1,59 +1,143 @@
-import { StatusAmostra, TipoAmostra, TipoAnalise } from "@/constants";
+import { FileType, StatusAmostra } from "@/constants";
+
+// --- Cidades IBGE ---
+
+export interface CidadeIBGE {
+  id: string;
+  nome: string;
+  estado: string;
+  regiao: string;
+  bioma: string;
+}
+
+// --- Produtores ---
 
 export interface Produtor {
   id: string;
   nome: string;
-  email: string;
-  telefone?: string;
-  cpfCnpj: string;
-  endereco?: Endereco;
-  criadoEm: string;
-  atualizadoEm: string;
+  cidadeId?: string;
+  cidade?: CidadeIBGE;
+  createdAt: string;
+  updatedAt: string;
 }
 
-export interface Endereco {
-  logradouro: string;
-  numero: string;
-  complemento?: string;
-  bairro: string;
-  cidade: string;
-  estado: string;
-  cep: string;
-  latitude?: number;
-  longitude?: number;
+// --- Responsáveis ---
+
+export interface Responsavel {
+  id: string;
+  nome: string;
+  instituicaoId: string;
+  cidadeId?: string;
+  cidade?: CidadeIBGE;
+  createdAt: string;
+  updatedAt: string;
 }
+
+// --- Tipos de Amostra ---
+
+export interface TipoAmostra {
+  id: string;
+  nome: string;
+  descricao?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// --- Tipos de Análise ---
+
+export interface TipoAnalise {
+  id: string;
+  nome: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// --- Abelhas ---
+
+export interface Abelha {
+  id: string;
+  nomeCientifico: string;
+  nomePopular?: string;
+  semFerrao: boolean;
+  nativa: boolean;
+  descricao?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// --- Pontos de Coleta ---
+
+export interface PontoColeta {
+  id: string;
+  nome: string;
+  latitude: number;
+  longitude: number;
+  raio?: number;
+  cidadeId: string;
+  cidade?: CidadeIBGE;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// --- Amostras ---
 
 export interface Amostra {
   id: string;
-  codigo: string;
-  tipo: TipoAmostra;
+  nome: string;
+  dataColeta: string;
   status: StatusAmostra;
+  pontoColetaId: string;
+  pontoColeta?: PontoColeta;
+  abelhaId: string;
+  abelha?: Abelha;
   produtorId: string;
   produtor?: Produtor;
-  dataColeta: string;
-  localizacao?: Localizacao;
+  tipoAmostraId: string;
+  tipoAmostra?: TipoAmostra;
   analises?: Analise[];
-  observacoes?: string;
-  criadoEm: string;
-  atualizadoEm: string;
+  fileGroups?: FileGroup[];
+  createdAt: string;
+  updatedAt: string;
 }
 
-export interface Localizacao {
-  latitude: number;
-  longitude: number;
-  descricao?: string;
-}
+// --- Análises ---
 
 export interface Analise {
   id: string;
   amostraId: string;
-  tipo: TipoAnalise;
-  resultado?: string;
-  laudoUrl?: string;
-  realizadaEm?: string;
-  criadoEm: string;
-  atualizadoEm: string;
+  amostra?: Amostra;
+  tipoAnaliseId: string;
+  tipoAnalise?: TipoAnalise;
+  responsavelId: string;
+  responsavel?: Responsavel;
+  fileGroups?: FileGroup[];
+  createdAt: string;
+  updatedAt: string;
 }
+
+// --- File Groups ---
+
+export interface FileGroup {
+  id: string;
+  amostraId?: string;
+  amostra?: Amostra;
+  analiseId?: string;
+  analise?: Analise;
+  files?: AppFile[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface AppFile {
+  id: string;
+  url: string;
+  type: FileType;
+  fileGroupId: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// --- Respostas genéricas ---
 
 export interface PaginatedResponse<T> {
   data: T[];

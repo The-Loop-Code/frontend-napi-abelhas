@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { samplesService, type ListAmostraParams } from "@/services/samples-service";
+import { amostrasService, type ListAmostrasParams } from "@/services/amostras-service";
 import type { Amostra, PaginatedResponse } from "@/types";
 
 interface UseAmostraReturn {
@@ -11,11 +11,11 @@ interface UseAmostraReturn {
   totalPages: number;
   loading: boolean;
   error: string | null;
-  fetchAmostras: (params?: ListAmostraParams) => Promise<void>;
+  fetchAmostras: (params?: ListAmostrasParams) => Promise<void>;
   setPage: (page: number) => void;
 }
 
-export function useAmostra(initialParams: ListAmostraParams = {}): UseAmostraReturn {
+export function useAmostra(initialParams: ListAmostrasParams = {}): UseAmostraReturn {
   const [result, setResult] = useState<PaginatedResponse<Amostra>>({
     data: [],
     total: 0,
@@ -25,19 +25,19 @@ export function useAmostra(initialParams: ListAmostraParams = {}): UseAmostraRet
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [params, setParams] = useState<ListAmostraParams>({
+  const [params, setParams] = useState<ListAmostrasParams>({
     page: 1,
     pageSize: 10,
     ...initialParams,
   });
 
   const fetchAmostras = useCallback(
-    async (overrideParams?: ListAmostraParams) => {
+    async (overrideParams?: ListAmostrasParams) => {
       setLoading(true);
       setError(null);
       try {
         const merged = { ...params, ...overrideParams };
-        const data = await samplesService.list(merged);
+        const data = await amostrasService.list(merged);
         setResult(data);
       } catch (err: unknown) {
         const message =
