@@ -1,0 +1,58 @@
+"use client";
+
+import { useEffect, useRef } from "react";
+import { Button } from "@/components/atoms";
+
+interface AnaliseModalProps {
+  open: boolean;
+  title?: string;
+  children: React.ReactNode;
+  onClose: () => void;
+  onConfirm?: () => void;
+  confirmLabel?: string;
+  loading?: boolean;
+}
+
+export function AnaliseModal({
+  open,
+  title = "Análise",
+  children,
+  onClose,
+  onConfirm,
+  confirmLabel = "Confirmar",
+  loading = false,
+}: AnaliseModalProps) {
+  const dialogRef = useRef<HTMLDialogElement>(null);
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+    if (open) {
+      dialog.showModal();
+    } else {
+      dialog.close();
+    }
+  }, [open]);
+
+  return (
+    <dialog ref={dialogRef} className="modal" onClose={onClose}>
+      <div className="modal-box">
+        <h3 className="font-bold text-lg mb-4">{title}</h3>
+        <div>{children}</div>
+        <div className="modal-action">
+          <Button variant="ghost" onClick={onClose} disabled={loading}>
+            Fechar
+          </Button>
+          {onConfirm && (
+            <Button onClick={onConfirm} loading={loading}>
+              {confirmLabel}
+            </Button>
+          )}
+        </div>
+      </div>
+      <form method="dialog" className="modal-backdrop">
+        <button onClick={onClose}>Fechar</button>
+      </form>
+    </dialog>
+  );
+}
