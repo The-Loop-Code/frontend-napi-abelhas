@@ -39,7 +39,7 @@ export function AmostraTable({ amostras, onSelect }: AmostraTableProps) {
       <table className="table table-zebra w-full">
         <thead>
           <tr>
-            <th>Código</th>
+            <th>Nome</th>
             <th>Tipo</th>
             <th>Produtor</th>
             <th>Data Coleta</th>
@@ -53,8 +53,8 @@ export function AmostraTable({ amostras, onSelect }: AmostraTableProps) {
               className={onSelect ? "cursor-pointer hover" : ""}
               onClick={() => onSelect?.(amostra)}
             >
-              <td className="font-mono">{amostra.codigo}</td>
-              <td>{amostra.tipo}</td>
+              <td className="font-mono">{amostra.nome}</td>
+              <td>{amostra.tipoAmostra?.nome ?? amostra.tipoAmostraId}</td>
               <td>{amostra.produtor?.nome ?? amostra.produtorId}</td>
               <td>{formatDate(amostra.dataColeta)}</td>
               <td>

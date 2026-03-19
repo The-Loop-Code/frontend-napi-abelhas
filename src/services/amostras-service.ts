@@ -1,46 +1,42 @@
 import { api } from "@/services/api";
 import type { Amostra, PaginatedResponse } from "@/types";
 
-export interface ListAmostraParams {
+export interface ListAmostrasParams {
   page?: number;
   pageSize?: number;
   search?: string;
-  status?: string;
-  tipo?: string;
+  tipoAmostraId?: string;
   produtorId?: string;
+  abelhaId?: string;
+  pontoColetaId?: string;
 }
 
 export interface CreateAmostraPayload {
-  tipo: string;
-  produtorId: string;
+  nome: string;
   dataColeta: string;
-  localizacao?: {
-    latitude: number;
-    longitude: number;
-    descricao?: string;
-  };
-  observacoes?: string;
+  pontoColetaId: string;
+  abelhaId: string;
+  produtorId: string;
+  tipoAmostraId: string;
 }
 
-export interface UpdateAmostraPayload extends Partial<CreateAmostraPayload> {
-  status?: string;
-}
+export type UpdateAmostraPayload = Partial<CreateAmostraPayload>;
 
-function buildQuery(params: ListAmostraParams): string {
+function buildQuery(params: ListAmostrasParams): string {
   const searchParams = new URLSearchParams();
   if (params.page != null) searchParams.set("page", String(params.page));
-  if (params.pageSize != null)
-    searchParams.set("pageSize", String(params.pageSize));
+  if (params.pageSize != null) searchParams.set("pageSize", String(params.pageSize));
   if (params.search) searchParams.set("search", params.search);
-  if (params.status) searchParams.set("status", params.status);
-  if (params.tipo) searchParams.set("tipo", params.tipo);
+  if (params.tipoAmostraId) searchParams.set("tipoAmostraId", params.tipoAmostraId);
   if (params.produtorId) searchParams.set("produtorId", params.produtorId);
+  if (params.abelhaId) searchParams.set("abelhaId", params.abelhaId);
+  if (params.pontoColetaId) searchParams.set("pontoColetaId", params.pontoColetaId);
   const query = searchParams.toString();
   return query ? `?${query}` : "";
 }
 
-export const samplesService = {
-  list: (params: ListAmostraParams = {}) =>
+export const amostrasService = {
+  list: (params: ListAmostrasParams = {}) =>
     api.get<PaginatedResponse<Amostra>>(`/amostras${buildQuery(params)}`),
 
   getById: (id: string) => api.get<Amostra>(`/amostras/${id}`),
@@ -49,7 +45,7 @@ export const samplesService = {
     api.post<Amostra>("/amostras", payload),
 
   update: (id: string, payload: UpdateAmostraPayload) =>
-    api.put<Amostra>(`/amostras/${id}`, payload),
+    api.patch<Amostra>(`/amostras/${id}`, payload),
 
   remove: (id: string) => api.delete<void>(`/amostras/${id}`),
 };
