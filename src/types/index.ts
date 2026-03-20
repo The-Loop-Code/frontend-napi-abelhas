@@ -1,10 +1,10 @@
-import { FileType, StatusAmostra } from "@/constants";
+import { FileType, StatusAmostra, StatusAnalise } from "@/constants";
 
 // --- Cidades IBGE ---
 
 export interface CidadeIBGE {
   id: string;
-  nome: string;
+  cidade: string;
   estado: string;
   regiao: string;
   bioma: string;
@@ -14,6 +14,7 @@ export interface CidadeIBGE {
 
 export interface Produtor {
   id: string;
+  orgId: string;
   nome: string;
   cidadeId?: string;
   cidade?: CidadeIBGE;
@@ -25,6 +26,7 @@ export interface Produtor {
 
 export interface Responsavel {
   id: string;
+  orgId: string;
   nome: string;
   instituicaoId: string;
   cidadeId?: string;
@@ -69,6 +71,7 @@ export interface Abelha {
 
 export interface PontoColeta {
   id: string;
+  orgId: string;
   nome: string;
   latitude: number;
   longitude: number;
@@ -83,6 +86,7 @@ export interface PontoColeta {
 
 export interface Amostra {
   id: string;
+  orgId: string;
   nome: string;
   dataColeta: string;
   status: StatusAmostra;
@@ -104,6 +108,8 @@ export interface Amostra {
 
 export interface Analise {
   id: string;
+  orgId: string;
+  status: StatusAnalise;
   amostraId: string;
   amostra?: Amostra;
   tipoAnaliseId: string;
@@ -119,6 +125,7 @@ export interface Analise {
 
 export interface FileGroup {
   id: string;
+  orgId: string;
   amostraId?: string;
   amostra?: Amostra;
   analiseId?: string;
@@ -132,6 +139,8 @@ export interface AppFile {
   id: string;
   url: string;
   type: FileType;
+  uploadedByUserId?: string;
+  uploadedByName?: string;
   fileGroupId: string;
   createdAt: string;
   updatedAt: string;

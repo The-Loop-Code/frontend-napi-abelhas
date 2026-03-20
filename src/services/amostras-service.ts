@@ -1,5 +1,5 @@
 import { api } from "@/services/api";
-import type { Amostra, PaginatedResponse } from "@/types";
+import type { Amostra } from "@/types";
 
 export interface ListAmostrasParams {
   page?: number;
@@ -37,7 +37,7 @@ function buildQuery(params: ListAmostrasParams): string {
 
 export const amostrasService = {
   list: (params: ListAmostrasParams = {}) =>
-    api.get<PaginatedResponse<Amostra>>(`/amostras${buildQuery(params)}`),
+    api.get<Amostra[]>(`/amostras${buildQuery(params)}`),  
 
   getById: (id: string) => api.get<Amostra>(`/amostras/${id}`),
 

@@ -1,5 +1,6 @@
 import { api } from "@/services/api";
-import type { Analise, PaginatedResponse } from "@/types";
+import type { StatusAnalise } from "@/constants";
+import type { Analise } from "@/types";
 
 export interface ListAnalisesParams {
   page?: number;
@@ -13,6 +14,7 @@ export interface CreateAnalisePayload {
   amostraId: string;
   tipoAnaliseId: string;
   responsavelId: string;
+  status?: StatusAnalise;
 }
 
 export type UpdateAnalisePayload = Partial<CreateAnalisePayload>;
@@ -30,7 +32,7 @@ function buildQuery(params: ListAnalisesParams): string {
 
 export const analisesService = {
   list: (params: ListAnalisesParams = {}) =>
-    api.get<PaginatedResponse<Analise>>(`/analises${buildQuery(params)}`),
+    api.get<Analise[]>(`/analises${buildQuery(params)}`),  
 
   getById: (id: string) => api.get<Analise>(`/analises/${id}`),
 

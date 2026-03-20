@@ -1,5 +1,5 @@
 import { api } from "@/services/api";
-import type { Responsavel, PaginatedResponse } from "@/types";
+import type { Responsavel } from "@/types";
 
 export interface ListResponsaveisParams {
   page?: number;
@@ -26,7 +26,7 @@ function buildQuery(params: ListResponsaveisParams): string {
 
 export const responsaveisService = {
   list: (params: ListResponsaveisParams = {}) =>
-    api.get<PaginatedResponse<Responsavel>>(`/responsaveis${buildQuery(params)}`),
+    api.get<Responsavel[]>(`/responsaveis${buildQuery(params)}`),  
 
   getById: (id: string) => api.get<Responsavel>(`/responsaveis/${id}`),
 

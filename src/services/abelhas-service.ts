@@ -1,5 +1,5 @@
 import { api } from "@/services/api";
-import type { Abelha, PaginatedResponse } from "@/types";
+import type { Abelha } from "@/types";
 
 export interface ListAbelhasParams {
   page?: number;
@@ -28,7 +28,7 @@ function buildQuery(params: ListAbelhasParams): string {
 
 export const abelhasService = {
   list: (params: ListAbelhasParams = {}) =>
-    api.get<PaginatedResponse<Abelha>>(`/abelhas${buildQuery(params)}`),
+    api.get<Abelha[]>(`/abelhas${buildQuery(params)}`),  
 
   getById: (id: string) => api.get<Abelha>(`/abelhas/${id}`),
 

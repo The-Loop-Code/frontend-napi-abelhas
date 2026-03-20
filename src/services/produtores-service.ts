@@ -1,5 +1,5 @@
 import { api } from "@/services/api";
-import type { Produtor, PaginatedResponse } from "@/types";
+import type { Produtor } from "@/types";
 
 export interface ListProdutoresParams {
   page?: number;
@@ -25,7 +25,7 @@ function buildQuery(params: ListProdutoresParams): string {
 
 export const produtoresService = {
   list: (params: ListProdutoresParams = {}) =>
-    api.get<PaginatedResponse<Produtor>>(`/produtores${buildQuery(params)}`),
+    api.get<Produtor[]>(`/produtores${buildQuery(params)}`),  
 
   getById: (id: string) => api.get<Produtor>(`/produtores/${id}`),
 

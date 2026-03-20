@@ -1,5 +1,5 @@
 import { api } from "@/services/api";
-import type { TipoAmostra, PaginatedResponse } from "@/types";
+import type { TipoAmostra } from "@/types";
 
 export interface ListTiposAmostraParams {
   page?: number;
@@ -25,7 +25,7 @@ function buildQuery(params: ListTiposAmostraParams): string {
 
 export const tiposAmostraService = {
   list: (params: ListTiposAmostraParams = {}) =>
-    api.get<PaginatedResponse<TipoAmostra>>(`/tipos-amostra${buildQuery(params)}`),
+    api.get<TipoAmostra[]>(`/tipos-amostra${buildQuery(params)}`),  
 
   getById: (id: string) => api.get<TipoAmostra>(`/tipos-amostra/${id}`),
 

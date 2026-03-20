@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Show } from "@clerk/nextjs";
 import { ROUTES } from "@/constants";
 
 export default function Home() {
@@ -12,12 +13,16 @@ export default function Home() {
             mel, própolis, geleia real e outros produtos.
           </p>
           <div className="flex gap-3 justify-center">
-            <Link href={ROUTES.LOGIN} className="btn btn-primary">
-              Entrar
-            </Link>
-            <Link href={ROUTES.AMOSTRAS} className="btn btn-outline">
-              Ver Amostras
-            </Link>
+            <Show when="signed-out">
+              <Link href={ROUTES.LOGIN} className="btn btn-primary">
+                Entrar
+              </Link>
+            </Show>
+            <Show when="signed-in">
+              <Link href={ROUTES.AMOSTRAS} className="btn btn-primary">
+                Ir para o Painel
+              </Link>
+            </Show>
           </div>
         </div>
       </div>

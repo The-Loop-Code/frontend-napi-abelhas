@@ -36,9 +36,10 @@ export function AnaliseModal({
 
   return (
     <dialog ref={dialogRef} className="modal" onClose={onClose}>
-      <div className="modal-box">
-        <h3 className="font-bold text-lg mb-4">{title}</h3>
-        <div>{children}</div>
+      <div className="modal-box max-w-lg">
+        <button className="btn btn-sm btn-circle btn-ghost absolute right-3 top-3" onClick={onClose}>✕</button>
+        <h3 className="font-bold text-lg">{title}</h3>
+        <div className="mt-4">{children}</div>
         <div className="modal-action">
           <Button variant="ghost" onClick={onClose} disabled={loading}>
             Fechar

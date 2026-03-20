@@ -1,6 +1,6 @@
 import { api } from "@/services/api";
 import type { FileType } from "@/constants";
-import type { FileGroup, AppFile, PaginatedResponse } from "@/types";
+import type { FileGroup, AppFile } from "@/types";
 
 export interface ListFileGroupsParams {
   page?: number;
@@ -19,6 +19,8 @@ export type UpdateFileGroupPayload = Partial<CreateFileGroupPayload>;
 export interface AddFilePayload {
   url: string;
   type?: FileType;
+  uploadedByUserId?: string;
+  uploadedByName?: string;
 }
 
 function buildQuery(params: ListFileGroupsParams): string {
@@ -33,7 +35,7 @@ function buildQuery(params: ListFileGroupsParams): string {
 
 export const fileGroupsService = {
   list: (params: ListFileGroupsParams = {}) =>
-    api.get<PaginatedResponse<FileGroup>>(`/file-groups${buildQuery(params)}`),
+    api.get<FileGroup[]>(`/file-groups${buildQuery(params)}`),  
 
   getById: (id: string) => api.get<FileGroup>(`/file-groups/${id}`),
 

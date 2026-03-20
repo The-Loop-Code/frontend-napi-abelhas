@@ -38,14 +38,16 @@ Diretrizes para refatoração, correção de bugs e evolução de funcionalidade
 **Extrair lógica de estado para hook:**
 
 ```typescript
-// ❌ Antes — lógica no componente
+// ❌ Antes — lógica no componente com acesso inseguro
 function AmostraPage() {
   const [amostras, setAmostras] = useState<Amostra[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    samplesService.list().then((res) => {
-      setAmostras(res.data);
+    amostrasService.list().then((res) => {
+      // ⚠️ Backend retorna T[], não PaginatedResponse
+      const items = Array.isArray(res) ? res : (res?.data ?? []);
+      setAmostras(items);
       setLoading(false);
     });
   }, []);
@@ -53,7 +55,7 @@ function AmostraPage() {
   // ...render
 }
 
-// ✅ Depois — lógica no hook
+// ✅ Depois — lógica no hook com acesso defensivo
 function AmostraPage() {
   const { amostras, loading } = useAmostra();
   // ...render
@@ -67,7 +69,7 @@ function AmostraPage() {
 function handleResponse(data: any) { ... }
 
 // ✅ Depois
-function handleResponse(data: PaginatedResponse<Amostra>) { ... }
+function handleResponse(data: Amostra[]) { ... }
 ```
 
 ## Correção de Bugs

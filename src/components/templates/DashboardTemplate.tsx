@@ -1,4 +1,5 @@
 import { Sidebar } from "@/components/organisms";
+import { AuthTokenProvider } from "@/providers";
 
 interface DashboardTemplateProps {
   children: React.ReactNode;
@@ -6,9 +7,11 @@ interface DashboardTemplateProps {
 
 export function DashboardTemplate({ children }: DashboardTemplateProps) {
   return (
-    <div className="flex min-h-screen">
-      <Sidebar />
-      <main className="flex-1 p-8 bg-base-100">{children}</main>
-    </div>
+    <AuthTokenProvider>
+      <div className="flex min-h-screen">
+        <Sidebar />
+        <main className="flex-1 p-8 bg-base-100">{children}</main>
+      </div>
+    </AuthTokenProvider>
   );
 }

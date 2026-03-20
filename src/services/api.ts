@@ -4,15 +4,31 @@ const defaultHeaders: HeadersInit = {
   "Content-Type": "application/json",
 };
 
+let tokenProvider: (() => Promise<string | null>) | null = null;
+
+export function setTokenProvider(provider: () => Promise<string | null>) {
+  tokenProvider = provider;
+}
+
 async function request<T>(
   path: string,
   options: RequestInit = {}
 ): Promise<T> {
   const url = `${API_BASE_URL}${path}`;
+
+  const authHeaders: HeadersInit = {};
+  if (tokenProvider) {
+    const token = await tokenProvider();
+    if (token) {
+      authHeaders["Authorization"] = `Bearer ${token}`;
+    }
+  }
+
   const response = await fetch(url, {
     ...options,
     headers: {
       ...defaultHeaders,
+      ...authHeaders,
       ...options.headers,
     },
   });

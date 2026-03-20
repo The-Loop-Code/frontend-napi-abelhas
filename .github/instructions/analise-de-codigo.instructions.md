@@ -10,6 +10,8 @@ Diretrizes para revisão e análise de código no projeto NAPI Abelhas.
 - [ ] Interfaces e tipos definidos em `src/types/` ou co-localizados no módulo.
 - [ ] Props de componentes tipadas com `interface` nomeada (`<Nome>Props`).
 - [ ] Retornos de funções explicitamente tipados.
+- [ ] Tipos de retorno de serviços correspondem ao que a API realmente retorna (ex.: `T[]` se backend retorna array, não `PaginatedResponse<T>`).
+- [ ] Hooks e componentes usam acesso defensivo a dados da API (`Array.isArray()`, inicialização com `[]`).
 
 ### Atomic Design
 

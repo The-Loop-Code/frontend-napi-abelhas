@@ -1,5 +1,5 @@
 import { api } from "@/services/api";
-import type { PontoColeta, PaginatedResponse } from "@/types";
+import type { PontoColeta } from "@/types";
 
 export interface ListPontosColetaParams {
   page?: number;
@@ -30,7 +30,7 @@ function buildQuery(params: ListPontosColetaParams): string {
 
 export const pontosColetaService = {
   list: (params: ListPontosColetaParams = {}) =>
-    api.get<PaginatedResponse<PontoColeta>>(`/pontos-coleta${buildQuery(params)}`),
+    api.get<PontoColeta[]>(`/pontos-coleta${buildQuery(params)}`),  
 
   getById: (id: string) => api.get<PontoColeta>(`/pontos-coleta/${id}`),
 

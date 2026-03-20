@@ -73,7 +73,7 @@ export function useAmostra(): UseAmostraReturn { ... }
 ### Tipagem de Serviços
 
 ```typescript
-// Parâmetros e retornos tipados
+// Parâmetros e retornos tipados — o tipo deve refletir o que a API realmente retorna
 interface ListAmostrasParams {
   page?: number;
   pageSize?: number;
@@ -83,12 +83,35 @@ interface ListAmostrasParams {
   produtorId?: string;
 }
 
+// ⚠️ O backend atualmente retorna arrays puros (T[]), NÃO PaginatedResponse.
+// Use T[] como tipo de retorno até que o backend implemente paginação real.
 export const samplesService = {
-  async list(params?: ListAmostrasParams): Promise<PaginatedResponse<Amostra>> { ... },
+  async list(params?: ListAmostrasParams): Promise<Amostra[]> { ... },
   async getById(id: string): Promise<Amostra> { ... },
   async create(data: Omit<Amostra, "id" | "createdAt" | "updatedAt">): Promise<Amostra> { ... },
 };
 ```
+
+### Acesso Defensivo a Respostas de API
+
+Ao consumir dados da API em hooks ou componentes, sempre trate a resposta de forma defensiva:
+
+```typescript
+// ✅ Correto — defensivo para ambos os formatos (array ou objeto paginado)
+const res = await service.list(params);
+const items = Array.isArray(res) ? res : (res?.data ?? []);
+
+// ❌ Errado — assume formato sem verificar (causa crash se a API retornar array)
+const res = await service.list(params);
+setResult(res);          // Se res é T[] e result espera PaginatedResponse<T>, quebra
+const items = res.data;  // undefined se res for um array
+```
+
+**Regras:**
+
+1. **Tipo do serviço deve refletir o backend** — Se a API retorna `T[]`, o serviço deve tipar como `T[]`, não `PaginatedResponse<T>`.
+2. **Inicialize arrays com `[]`** — `useState<T[]>([])` garante que `.length` e `.map()` funcionem antes do fetch.
+3. **Verifique com `Array.isArray()`** — Quando a forma da resposta é incerta, use `Array.isArray(res)` antes de acessar `.data`.
 
 ### Tipagem de Eventos
 

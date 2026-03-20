@@ -1,5 +1,5 @@
 import { api } from "@/services/api";
-import type { CidadeIBGE, PaginatedResponse } from "@/types";
+import type { CidadeIBGE } from "@/types";
 
 export interface ListCidadesIbgeParams {
   page?: number;
@@ -22,7 +22,9 @@ function buildQuery(params: ListCidadesIbgeParams): string {
 
 export const cidadesIbgeService = {
   list: (params: ListCidadesIbgeParams = {}) =>
-    api.get<PaginatedResponse<CidadeIBGE>>(`/cidades-ibge${buildQuery(params)}`),
+    api.get<CidadeIBGE[]>(`/cidades-ibge${buildQuery(params)}`),  
 
   getById: (id: string) => api.get<CidadeIBGE>(`/cidades-ibge/${id}`),
+
+  seed: () => api.post<{ message: string }>("/cidades-ibge/seed", {}),
 };

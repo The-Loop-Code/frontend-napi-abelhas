@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { amostrasService, type ListAmostrasParams } from "@/services/amostras-service";
-import type { Amostra, PaginatedResponse } from "@/types";
+import type { Amostra } from "@/types";
 
 interface UseAmostraReturn {
   amostras: Amostra[];
@@ -16,13 +16,7 @@ interface UseAmostraReturn {
 }
 
 export function useAmostra(initialParams: ListAmostrasParams = {}): UseAmostraReturn {
-  const [result, setResult] = useState<PaginatedResponse<Amostra>>({
-    data: [],
-    total: 0,
-    page: 1,
-    pageSize: 10,
-    totalPages: 0,
-  });
+  const [amostras, setAmostras] = useState<Amostra[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [params, setParams] = useState<ListAmostrasParams>({
@@ -37,8 +31,8 @@ export function useAmostra(initialParams: ListAmostrasParams = {}): UseAmostraRe
       setError(null);
       try {
         const merged = { ...params, ...overrideParams };
-        const data = await amostrasService.list(merged);
-        setResult(data);
+        const items = await amostrasService.list(merged);
+        setAmostras(items);
       } catch (err: unknown) {
         const message =
           err instanceof Error ? err.message : "Erro ao carregar amostras.";
@@ -58,10 +52,10 @@ export function useAmostra(initialParams: ListAmostrasParams = {}): UseAmostraRe
     setParams((prev) => ({ ...prev, page }));
 
   return {
-    amostras: result.data,
-    total: result.total,
-    page: result.page,
-    totalPages: result.totalPages,
+    amostras,
+    total: amostras.length,
+    page: params.page ?? 1,
+    totalPages: 0,
     loading,
     error,
     fetchAmostras,
