@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start --port 3001"
   },
   "dependencies": {
     "@clerk/localizations": "^4.2.2",
